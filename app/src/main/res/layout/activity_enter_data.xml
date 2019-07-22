@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ededed"
+    android:gravity="center"
+    android:id="@+id/relative_main"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".EnterDataActivity">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ScrollView
+       android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+
+
+        <EditText
+            android:id="@+id/field_first_name"
+            android:textColorHint="#000"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:background="@drawable/backgrounds"
+            android:hint="First Name"
+            android:imeOptions="actionNext|flagNoFullscreen"
+            android:inputType="textPersonName"
+            android:minLines="3"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <EditText
+            android:id="@+id/field_middle_name"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:layout_marginTop="8dp"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:background="@drawable/backgrounds"
+            android:hint="Middle Name"
+            android:textColorHint="#000"
+            android:imeOptions="actionNext|flagNoFullscreen"
+            android:inputType="textPersonName"
+            android:minLines="3"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <EditText
+            android:id="@+id/field_sur_name"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:layout_marginTop="8dp"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:background="@drawable/backgrounds"
+            android:hint="Surname"
+            android:imeOptions="actionNext|flagNoFullscreen"
+            android:inputType="textPersonName"
+            android:minLines="3"
+            android:textColorHint="#000"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <TextView
+            android:id="@+id/field_dob"
+            android:textColorHint="#000"
+            android:gravity="center_vertical"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:layout_marginTop="8dp"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:background="@drawable/backgrounds"
+            android:hint="Date of Birth"
+            android:minLines="3"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <EditText
+            android:id="@+id/field_email"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:layout_marginTop="8dp"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:background="@drawable/backgrounds"
+            android:hint="Email Address"
+            android:imeOptions="actionNext|flagNoFullscreen"
+            android:inputType="textEmailAddress"
+            android:minLines="3"
+            android:textColorHint="#000"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <EditText
+            android:id="@+id/field_phone_number"
+            android:textColorHint="#000"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:layout_marginTop="8dp"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:background="@drawable/backgrounds"
+            android:hint="Phone Number"
+            android:imeOptions="actionNext|flagNoFullscreen"
+            android:inputType="phone"
+            android:minLines="3"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <EditText
+            android:id="@+id/field_city"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:layout_marginTop="8dp"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:background="@drawable/backgrounds"
+            android:hint="City/Town"
+            android:imeOptions="actionNext|flagNoFullscreen"
+            android:inputType="textPersonName"
+            android:minLines="3"
+            android:textColorHint="#000"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <EditText
+            android:id="@+id/field_parentsName"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:layout_marginTop="8dp"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:background="@drawable/backgrounds"
+            android:hint="Parent/Guardian Name"
+            android:imeOptions="actionNext|flagNoFullscreen"
+            android:inputType="textPersonName"
+            android:minLines="3"
+            android:textColorHint="#000"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <EditText
+            android:id="@+id/field_parent_phone_number"
+            android:textColorHint="#000"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:layout_marginTop="8dp"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:background="@drawable/backgrounds"
+            android:hint="Parent/Guardian Phone Number"
+            android:imeOptions="actionNext|flagNoFullscreen"
+            android:inputType="phone"
+            android:minLines="3"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <EditText
+            android:id="@+id/field_Emergency"
+            android:textColorHint="#000"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/backgrounds"
+            android:hint="Emergency Contact"
+            android:imeOptions="actionNext|flagNoFullscreen"
+            android:inputType="phone"
+            android:minLines="3"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <TextView
+            android:id="@+id/field_photo"
+            android:textColorHint="#000"
+            android:gravity="center_vertical"
+            style="@style/AppTheme.Widget.FormField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/form_field_height"
+            android:textColor="#fff"
+            android:textSize="15sp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/backgrounds"
+            android:hint="Add Profile Picture"
+            android:minLines="3"
+            android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage" />
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textColor="#fff"
+            android:background="@drawable/buttons"
+            android:text="SAVE" />
+
+    </LinearLayout>
+
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

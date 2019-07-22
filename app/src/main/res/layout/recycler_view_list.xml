@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="3dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageViewRe"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/profile" />
+
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="2dp"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/imageViewRe"
+                android:text="Ronnie Otieno"
+                android:textColor="#000"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textViewPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewName"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/imageViewRe"
+                android:text="0706018504"
+                android:textColor="#4C4A4E "
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="30dp"
+        android:background="@android:color/darker_gray"/>
+
+</LinearLayout>
