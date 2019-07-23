@@ -6,11 +6,17 @@
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search"
         android:title="Search"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="?android:selectableItemBackground"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
     <item
         android:id="@+id/log_out"
         android:title="Log Out"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="?android:selectableItemBackground"
         app:showAsAction="never" />
 
 </menu>

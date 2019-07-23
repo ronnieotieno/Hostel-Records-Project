@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="#D3D3D3"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
@@ -17,6 +18,9 @@
             android:id="@+id/imageViewDe"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:background="?android:selectableItemBackground"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:src="@drawable/profile" />
@@ -46,205 +50,208 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="First Name"
-                android:textColor="#000" />
+                android:textColor="#4C4A4E" />
 
             <EditText
                 android:id="@+id/texView_first_name"
                 style="@style/AppTheme.Widget.FormField"
                 android:layout_width="match_parent"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:layout_height="@dimen/form_field_height"
                 android:background="@drawable/backgrounds"
                 android:focusable="true"
                 android:gravity="center"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#fff" />
+                android:textColor="#000"
+                />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Middle Name"
-                android:textColor="#000" />
+                android:textColor="#4C4A4E" />
 
             <EditText
                 android:id="@+id/texView_middle_name"
                 style="@style/AppTheme.Widget.FormField"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/form_field_height"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/backgrounds"
                 android:focusable="true"
                 android:gravity="center"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff" />
+                android:textColor="#000" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Surname"
-                android:textColor="#000" />
+                android:textColor="#4C4A4E" />
 
             <EditText
                 android:id="@+id/texView_sur_name"
                 style="@style/AppTheme.Widget.FormField"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/form_field_height"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/backgrounds"
                 android:focusable="true"
                 android:gravity="center"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#fff" />
+                android:textColor="#000"
+              />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Date of Birth"
-                android:textColor="#000" />
+                android:textColor="#4C4A4E" />
 
             <TextView
                 android:id="@+id/texView_dob"
                 style="@style/AppTheme.Widget.FormField"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/form_field_height"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/backgrounds"
                 android:focusable="true"
                 android:gravity="center"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#fff" />
+                android:textColor="#000"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Email Address"
-                android:textColor="#000" />
+                android:textColor="#4C4A4E" />
 
             <EditText
                 android:id="@+id/texView_email"
                 style="@style/AppTheme.Widget.FormField"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/form_field_height"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/backgrounds"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="center"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#fff" />
+                android:textColor="#000"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Phone Number"
-                android:textColor="#000" />
+                android:textColor="#4C4A4E" />
 
             <EditText
                 android:id="@+id/texView_phone"
                 style="@style/AppTheme.Widget.FormField"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/form_field_height"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/backgrounds"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="center"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#fff" />
+                android:textColor="#000" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="City/Town"
-                android:textColor="#000" />
+                android:textColor="#4C4A4E" />
 
             <EditText
                 android:id="@+id/texView_city"
                 style="@style/AppTheme.Widget.FormField"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/form_field_height"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/backgrounds"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="center"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#fff" />
+                android:textColor="#000" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Parent/Guardian Name"
-                android:textColor="#000" />
+                android:textColor="#4C4A4E"/>
 
             <EditText
                 android:id="@+id/texView_parent_name"
                 style="@style/AppTheme.Widget.FormField"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/form_field_height"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/backgrounds"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="center"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#fff" />
+                android:textColor="#000" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Parent/Guardian Contact"
-                android:textColor="#000" />
+                android:textColor="#4C4A4E" />
 
             <EditText
                 android:id="@+id/texView_parent_contact"
                 style="@style/AppTheme.Widget.FormField"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/form_field_height"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/backgrounds"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="center"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#fff" />
+                android:textColor="#000" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Emergency Contact"
-                android:textColor="#000" />
+                android:textColor="#4C4A4E" />
 
             <EditText
                 android:id="@+id/texView_emergency_contact"
                 style="@style/AppTheme.Widget.FormField"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/form_field_height"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/backgrounds"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="center"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#fff" />
+                android:textColor="#000" />
 
         </LinearLayout>
 

@@ -6,11 +6,17 @@
         android:id="@+id/Save_menu"
         android:icon="@drawable/ic_save"
         android:title="Save"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="?android:selectableItemBackground"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/Edit_menu"
         android:icon="@drawable/ic_edit"
         android:title="Edit"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="?android:selectableItemBackground"
         app:showAsAction="ifRoom" />
 
 </menu>

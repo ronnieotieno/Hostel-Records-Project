@@ -206,6 +206,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                     Search(newText.trim());
                     recyclerViewAdapter.startListening();
                 }
+
                 return false;
             }
         });
@@ -223,18 +224,17 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                         .setQuery(query, Item.class)
                         .build();
                 recyclerViewAdapter = new RecyclerViewAdapter(options, ListActivity.this);
-                recyclerView.setHasFixedSize(true);
+                recyclerView.setHasFixedSize(false);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(recyclerViewAdapter);
                 recyclerViewAdapter.notifyDataSetChanged();
                 recyclerViewAdapter.setOnItemClickListener(ListActivity.this);
-            } else {
-                setUpAdapter();
             }
         }
     }
 
     public void setUpAdapter() {
+
         if (user != null) {
             dbRef = db.collection(user.getUid() + "Archives");
             Query query = dbRef.orderBy("date", Query.Direction.DESCENDING);
@@ -245,10 +245,11 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             recyclerViewAdapter = new RecyclerViewAdapter(options, ListActivity.this);
             recyclerViewAdapter.startListening();
             recyclerViewAdapter.notifyDataSetChanged();
-            recyclerView.setHasFixedSize(true);
+            recyclerView.setHasFixedSize(false);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(recyclerViewAdapter);
             recyclerViewAdapter.setOnItemClickListener(ListActivity.this);
         }
     }
+
 }

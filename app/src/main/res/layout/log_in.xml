@@ -88,8 +88,8 @@
                 android:inputType="textEmailAddress"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#000"
+                android:textColor="#000"
+                android:textColorHint="#808080"
                 android:textSize="15sp" />
 
             <EditText
@@ -104,8 +104,8 @@
                 android:inputType="textPassword"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
-                android:textColor="#fff"
-                android:textColorHint="#000"
+                android:textColor="#000"
+                android:textColorHint="#808080"
                 android:textSize="15sp" />
 
             <Button
