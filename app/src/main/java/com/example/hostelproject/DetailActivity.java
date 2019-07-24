@@ -51,19 +51,19 @@ import static java.lang.System.currentTimeMillis;
 
 public class DetailActivity extends AppCompatActivity implements
         ChooseImageFragment.OnInputListener, DatePickerDialog.OnDateSetListener {
-    EditText textViewFname, textViewMname, textViewSname, textViewEmail, textViewParents_phone, textViewParents_name, textView_phone,
+    private EditText textViewFname, textViewMname, textViewSname, textViewEmail, textViewParents_phone, textViewParents_name, textView_phone,
             textViewEmergency, textViewCity;
-    CircleImageView imageView;
-    String profile;
-    LinearLayout linearLayout;
-    byte[] uriProfileImage;
-    String profileimage;
-    ProgressBar progressBar;
-    TextView textViewDob;
-    Toolbar toolbar;
-    MenuItem save;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseUser user = mAuth.getCurrentUser();
+    private CircleImageView imageView;
+    private String profile;
+    private LinearLayout linearLayout;
+    private byte[] uriProfileImage;
+    private String profileimage;
+    private ProgressBar progressBar;
+    private TextView textViewDob;
+    private Toolbar toolbar;
+    private MenuItem save;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user = mAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

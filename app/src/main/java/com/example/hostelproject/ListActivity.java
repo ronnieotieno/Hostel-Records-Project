@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hostelproject.Adapter.RecyclerViewAdapter;
 import com.example.hostelproject.models.Item;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,17 +44,17 @@ import static com.example.hostelproject.Constants.profile_Picture;
 
 public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener {
 
-    RecyclerViewAdapter recyclerViewAdapter;
-    RecyclerView recyclerView;
+    private RecyclerViewAdapter recyclerViewAdapter;
+    private RecyclerView recyclerView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    Context context;
-    FloatingActionButton fab;
-    Item clickedItem;
+    private Context context;
+    private FloatingActionButton fab;
+    private Item clickedItem;
     public static int Clicked_Request_Code = 45;
-    FirestoreRecyclerOptions<Item> options;
-    CollectionReference dbRef;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseUser user = mAuth.getCurrentUser();
+    private FirestoreRecyclerOptions<Item> options;
+    private CollectionReference dbRef;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user = mAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

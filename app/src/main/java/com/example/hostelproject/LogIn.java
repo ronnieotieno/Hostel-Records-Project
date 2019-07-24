@@ -138,8 +138,8 @@ public class LogIn extends AppCompatActivity {
             }
         });
 
-        AlertDialog alert1 = builder.create();
-        alert1.show();
+        AlertDialog alert = builder.create();
+        alert.show();
 
 
     }

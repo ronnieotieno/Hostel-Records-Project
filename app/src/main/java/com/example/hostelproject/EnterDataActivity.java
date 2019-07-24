@@ -56,10 +56,10 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
     public static final int STORAGE_REQUEST = 4;
     private byte[] mUploadBytes;
     private String profileImageUrl;
-    Context context;
-    CollectionReference dbRef;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseUser user = mAuth.getCurrentUser();
+    private Context context;
+    private CollectionReference dbRef;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user = mAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,7 +179,7 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
             return;
         }
         if (Dob.isEmpty()) {
-            textViewDob.setError("Date of Birth number is Required");
+            textViewDob.setError("Date of Birth is Required");
             textViewDob.requestFocus();
             return;
         } else {

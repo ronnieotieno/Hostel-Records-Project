@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 
 public class ImageActivity extends AppCompatActivity {
 
-    ImageView imageView;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
