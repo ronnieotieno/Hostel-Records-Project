@@ -20,7 +20,7 @@
             android:id="@+id/imageViewRe"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            app:imageUrl="@{adapter.image}"
+            app:image="@{adapter.image}"
             android:padding="3dp"
             android:src="@drawable/profile" />
 

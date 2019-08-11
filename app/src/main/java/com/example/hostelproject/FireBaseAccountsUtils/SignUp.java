@@ -5,17 +5,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 
 import com.example.hostelproject.R;
+import com.example.hostelproject.databinding.SignUpBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,108 +22,83 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignUp extends AppCompatActivity {
-    private ProgressBar progressBar;
-    private EditText editTextEmail, editTextPassword, editTextConfirm;
-    private Button signUp;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
-    private TextView goLogin;
+    private SignUpBinding signUpBinding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sign_up);
-        editTextConfirm = findViewById(R.id.password_confirm);
-        editTextEmail = findViewById(R.id.tv_email_sign);
-        editTextPassword = findViewById(R.id.password_sign);
-        progressBar = findViewById(R.id.progress_sign);
-        signUp = findViewById(R.id.btn_sign_up);
-        goLogin = findViewById(R.id.tv_go_log_in);
-
-        goLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gotoLogIn();
-            }
-        });
+        signUpBinding = DataBindingUtil.setContentView(this, R.layout.sign_up);
 
         mAuth = FirebaseAuth.getInstance();
 
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.statusbar));
-
-            signUp.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RegisterUser();
-                }
-            });
         }
     }
 
-    private void gotoLogIn() {
-        Intent intent = new Intent(SignUp.this, LogIn.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        finish();
-        startActivity(intent);
-    }
 
-    private void RegisterUser() {
-        final String password = editTextPassword.getText().toString().trim();
-        String pass2 = editTextConfirm.getText().toString().trim();
-        final String email = editTextEmail.getText().toString().trim();
+    public void RegisterUser(View view) {
+        final String password = signUpBinding.passwordSign.getText().toString().trim();
+        String pass2 = signUpBinding.passwordConfirm.getText().toString().trim();
+        final String email = signUpBinding.tvEmailSign.getText().toString().trim();
 
 
         if (email.isEmpty()) {
-            editTextEmail.setError("Email is required");
-            editTextEmail.requestFocus();
+            signUpBinding.tvEmailSign.setError("Email is required");
+            signUpBinding.tvEmailSign.requestFocus();
             return;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            editTextEmail.setError("Please enter a valid email");
-            editTextEmail.requestFocus();
+            signUpBinding.tvEmailSign.setError("Please enter a valid email");
+            signUpBinding.tvEmailSign.requestFocus();
             return;
         }
-        if (password.equals(pass2)) {
-
-            if (password.isEmpty()) {
-                editTextPassword.setError("Password is required");
-                editTextPassword.requestFocus();
-                return;
-            }
-
-            if (password.length() < 6) {
-                editTextPassword.setError("Minimum length of password should be 6");
-                editTextPassword.requestFocus();
-                return;
-
-            }
-        } else {
-            editTextConfirm.setError("Password did not match");
-            editTextConfirm.requestFocus();
+        if (!password.equals(pass2)) {
+            signUpBinding.passwordConfirm.setError("Password did not match");
+            signUpBinding.passwordConfirm.requestFocus();
             return;
         }
+
+        if (password.isEmpty()) {
+            signUpBinding.passwordSign.setError("Password is required");
+            signUpBinding.passwordSign.requestFocus();
+            return;
+        }
+
+        if (password.length() < 6) {
+            signUpBinding.passwordSign.setError("Minimum length of password should be 6");
+            signUpBinding.passwordSign.requestFocus();
+            return;
+
+        }
+
         user = mAuth.getCurrentUser();
-        progressBar.setVisibility(View.VISIBLE);
+        signUpBinding.progressSign.setVisibility(View.VISIBLE);
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(
-                            email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Toast.makeText(SignUp.this, "Registered Successfully", Toast.LENGTH_LONG).show();
-                            gotoLogIn();
-                        }
-                    });
+                    signUpBinding.progressSign.setVisibility(View.GONE);
+                    Toast.makeText(SignUp.this, "Registered Successfully", Toast.LENGTH_LONG).show();
+                    goToLogIn(signUpBinding.btnSignUp);
+
                 } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                     Toast.makeText(getApplicationContext(), "You are already registered", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    public void goToLogIn(View view) {
+        Intent intent = new Intent(SignUp.this, LogIn.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 }

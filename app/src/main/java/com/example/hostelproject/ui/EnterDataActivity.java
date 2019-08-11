@@ -72,7 +72,7 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
             getSupportActionBar().setHomeButtonEnabled(true);
             setTitle("Enter Data");
         }
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+       toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
