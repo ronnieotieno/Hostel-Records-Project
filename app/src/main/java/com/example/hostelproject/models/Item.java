@@ -1,12 +1,20 @@
 package com.example.hostelproject.models;
 
+import android.view.View;
+
+import androidx.databinding.BindingAdapter;
+
+import com.example.hostelproject.R;
 import com.google.firebase.database.Exclude;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class Item {
 
-    private String fname;
+    public String fname;
     private String mname;
     private String sname;
     private String email;
@@ -22,7 +30,7 @@ public class Item {
     @Exclude
     private String id;
 
-   public Item() {
+    public Item() {
         //Empty constructor required
 
     }
@@ -97,6 +105,19 @@ public class Item {
 
     public Date getDate() {
         return date;
+    }
+
+    @BindingAdapter({"app:imageUrl"})
+    public static void loadImage(View view, String profilePicture) {
+
+        CircleImageView imageView = (CircleImageView) view;
+
+        Picasso.get()
+                .load(profilePicture)
+                .placeholder(R.drawable.loading)
+                .fit()
+                .centerInside()
+                .into(imageView);
     }
 
 }

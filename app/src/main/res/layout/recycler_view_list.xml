@@ -1,51 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="70dp"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginStart="10dp"
     android:background="?android:attr/selectableItemBackground"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
+    <data>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageViewRe"
-        android:layout_width="60dp"
-        android:padding="3dp"
-        android:layout_height="60dp"
-        android:src="@drawable/profile" />
+        <variable
+            name="adapter"
+            type="com.example.hostelproject.models.AdapterItem" />
+    </data>
 
-    <TextView
-        android:id="@+id/textViewName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="2dp"
-        android:layout_toEndOf="@+id/imageViewRe"
-        android:text="Ronnie Otieno"
-        android:textColor="#000"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/textViewPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewName"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/imageViewRe"
-        android:text="0706018504"
-        android:textColor="#4C4A4E"
-        android:textSize="14sp" />
-
-
-    <View
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="69.5dp"
-        android:layout_marginBottom="0.dp"
-        android:background="@android:color/darker_gray" />
+        android:layout_height="70dp">
 
-</RelativeLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewRe"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:imageUrl="@{adapter.image}"
+            android:padding="3dp"
+            android:src="@drawable/profile" />
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="2dp"
+            android:layout_toEndOf="@+id/imageViewRe"
+            android:text="@{adapter.name}"
+            android:textColor="#000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textViewPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewName"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/imageViewRe"
+            android:text="@{adapter.phone}"
+            android:textColor="#4C4A4E"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="69.5dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="0.dp"
+            android:background="@android:color/darker_gray" />
+    </RelativeLayout>
+
+</layout>

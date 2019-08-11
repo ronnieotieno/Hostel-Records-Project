@@ -13,18 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ImageActivity" />
-        <activity android:name=".ListActivity">
+        <activity android:name=".ui.ImageActivity" />
+        <activity android:name=".ui.ListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EnterDataActivity" />
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".SignUp"></activity>
-        <activity android:name=".LogIn" />
+        <activity android:name=".ui.EnterDataActivity" />
+        <activity android:name=".ui.DetailActivity" />
+        <activity android:name=".FireBaseAccountsUtils.SignUp"></activity>
+        <activity android:name=".FireBaseAccountsUtils.LogIn" />
 
     </application>
 

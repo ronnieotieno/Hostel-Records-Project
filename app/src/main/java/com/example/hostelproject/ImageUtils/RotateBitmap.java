@@ -1,4 +1,4 @@
-package com.example.hostelproject;
+package com.example.hostelproject.ImageUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

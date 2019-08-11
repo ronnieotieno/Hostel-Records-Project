@@ -1,4 +1,4 @@
-package com.example.hostelproject;
+package com.example.hostelproject.ui;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -10,31 +10,30 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.hostelproject.ImageUtils.ChooseImageFragment;
+import com.example.hostelproject.R;
+import com.example.hostelproject.databinding.ActivityDetailBinding;
+import com.example.hostelproject.models.Item;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.Calendar;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.example.hostelproject.Constants.Email;
 import static com.example.hostelproject.Constants.First_Name;
@@ -51,24 +50,19 @@ import static java.lang.System.currentTimeMillis;
 
 public class DetailActivity extends AppCompatActivity implements
         ChooseImageFragment.OnInputListener, DatePickerDialog.OnDateSetListener {
-    private EditText textViewFname, textViewMname, textViewSname, textViewEmail, textViewParents_phone, textViewParents_name, textView_phone,
-            textViewEmergency, textViewCity;
-    private CircleImageView imageView;
     private String profile;
-    private LinearLayout linearLayout;
     private byte[] uriProfileImage;
-    private String profileimage;
-    private ProgressBar progressBar;
-    private TextView textViewDob;
+    private String profileImage;
     private Toolbar toolbar;
     private MenuItem save;
+    ActivityDetailBinding activityDetailBinding;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = mAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        activityDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         toolbar = findViewById(R.id.toolbar);
@@ -86,24 +80,8 @@ public class DetailActivity extends AppCompatActivity implements
             }
         });
 
-        textViewFname = findViewById(R.id.texView_first_name);
-        textViewMname = findViewById(R.id.texView_middle_name);
-        textViewSname = findViewById(R.id.texView_sur_name);
-        textViewEmail = findViewById(R.id.texView_email);
-        textView_phone = findViewById(R.id.texView_phone);
-        textViewDob = findViewById(R.id.texView_dob);
-        textViewParents_name = findViewById(R.id.texView_parent_name);
-        textViewParents_phone = findViewById(R.id.texView_parent_contact);
-        textViewEmergency = findViewById(R.id.texView_emergency_contact);
-        imageView = findViewById(R.id.imageViewDe);
-        textViewCity = findViewById(R.id.texView_city);
-        linearLayout = findViewById(R.id.linear);
-        progressBar = findViewById(R.id.progressbarUpdate);
 
-
-        DisabledViews();
-
-        imageView.setOnClickListener(new View.OnClickListener() {
+        activityDetailBinding.imageViewDe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailActivity.this, ImageActivity.class);
@@ -118,26 +96,12 @@ public class DetailActivity extends AppCompatActivity implements
         InitializeIntent();
     }
 
-    public void DisabledViews() {
-        textViewFname.setEnabled(false);
-        textViewMname.setEnabled(false);
-        textViewSname.setEnabled(false);
-        textViewEmail.setEnabled(false);
-        textView_phone.setEnabled(false);
-        textViewDob.setEnabled(false);
-        textViewParents_name.setEnabled(false);
-        textViewParents_phone.setEnabled(false);
-        textViewEmergency.setEnabled(false);
-        textView_phone.setEnabled(false);
-        textViewCity.setEnabled(false);
-    }
-
 
     public void InitializeIntent() {
         Intent intent = getIntent();
-        String Fname = intent.getStringExtra(First_Name);
-        String Mname = intent.getStringExtra(Middle_Name);
-        String Sname = intent.getStringExtra(Sur_Name);
+        String fName = intent.getStringExtra(First_Name);
+        String mName = intent.getStringExtra(Middle_Name);
+        String sName = intent.getStringExtra(Sur_Name);
         String email = intent.getStringExtra(Email);
         String Phone = intent.getStringExtra(phone);
         String City = intent.getStringExtra(city);
@@ -146,24 +110,10 @@ public class DetailActivity extends AppCompatActivity implements
         String Emergency = intent.getStringExtra(emergency);
         profile = intent.getStringExtra(profile_Picture);
         String Dob = intent.getStringExtra(dob);
-        textViewEmergency.setText(Emergency);
-        textViewParents_phone.setText(parents_phone);
-        textViewParents_name.setText(parents_name);
-        textViewDob.setText(Dob);
-        textViewEmail.setText(email);
-        textViewSname.setText(Sname);
-        textViewMname.setText(Mname);
-        textViewFname.setText(Fname);
-        textViewCity.setText(City);
-        textView_phone.setText(Phone);
 
+        Item item = new Item(fName, mName, sName, email, Phone, City, parents_name, parents_phone, Dob, Emergency, profile, null);
+        activityDetailBinding.setItems(item);
 
-        Picasso.get()
-                .load(profile)
-                .placeholder(R.drawable.loading)
-                .fit()
-                .centerInside()
-                .into(imageView);
     }
 
     @Override
@@ -184,24 +134,25 @@ public class DetailActivity extends AppCompatActivity implements
             SetViewsEnabled();
         } else if (item.getItemId() == R.id.Save_menu) {
             Update();
+
         }
         return super.onOptionsItemSelected(item);
     }
 
     void SetViewsEnabled() {
-        textViewFname.setEnabled(true);
-        textViewFname.requestFocus();
-        textViewMname.setEnabled(true);
-        textViewSname.setEnabled(true);
-        textViewEmail.setEnabled(true);
-        textView_phone.setEnabled(true);
-        textViewDob.setEnabled(true);
-        textViewParents_name.setEnabled(true);
-        textViewParents_phone.setEnabled(true);
-        textViewEmergency.setEnabled(true);
-        textViewCity.setEnabled(true);
+        activityDetailBinding.texViewFirstName.setEnabled(true);
+        activityDetailBinding.texViewFirstName.requestFocus();
+        activityDetailBinding.texViewMiddleName.setEnabled(true);
+        activityDetailBinding.texViewSurName.setEnabled(true);
+        activityDetailBinding.texViewEmail.setEnabled(true);
+        activityDetailBinding.texViewPhone.setEnabled(true);
+        activityDetailBinding.texViewDob.setEnabled(true);
+        activityDetailBinding.texViewParentName.setEnabled(true);
+        activityDetailBinding.texViewParentContact.setEnabled(true);
+        activityDetailBinding.texViewEmergencyContact.setEnabled(true);
+        activityDetailBinding.texViewCity.setEnabled(true);
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        activityDetailBinding.imageViewDe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -218,7 +169,7 @@ public class DetailActivity extends AppCompatActivity implements
             }
 
         });
-        textViewDob.setOnClickListener(new View.OnClickListener() {
+        activityDetailBinding.texViewDob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment datePicker = new com.example.hostelproject.DatePicker();
@@ -229,34 +180,34 @@ public class DetailActivity extends AppCompatActivity implements
 
     }
 
-    void Update() {
-        String fnameintent = textViewFname.getText().toString();
-        String mnameintent = textViewMname.getText().toString();
-        String snameintent = textViewSname.getText().toString();
-        String Emailintent = textViewEmail.getText().toString();
-        String phoneintent = textView_phone.getText().toString();
-        String cityintent = textViewCity.getText().toString();
-        String parentsphoneIntent = textViewParents_phone.getText().toString();
-        String parentsnameintent = textViewParents_name.getText().toString();
-        String emergencyintent = textViewEmergency.getText().toString();
-        String Dobintent = textViewDob.getText().toString();
+    public void Update() {
+        String fNameIntent = activityDetailBinding.texViewFirstName.getText().toString().trim();
+        String mNameIntent = activityDetailBinding.texViewMiddleName.getText().toString().trim();
+        String sNameIntent = activityDetailBinding.texViewSurName.getText().toString().trim();
+        String emailIntent = activityDetailBinding.texViewEmail.getText().toString().trim();
+        String phoneIntent = activityDetailBinding.texViewPhone.getText().toString().trim();
+        String cityIntent = activityDetailBinding.texViewCity.getText().toString().trim();
+        String parentsPhoneIntent = activityDetailBinding.texViewParentContact.getText().toString().trim();
+        String parentsNameIntent = activityDetailBinding.texViewParentName.getText().toString().trim();
+        String emergencyIntent = activityDetailBinding.texViewEmergencyContact.getText().toString().trim();
+        String dobIntent = activityDetailBinding.texViewDob.getText().toString().trim();
 
 
         Intent intent = new Intent();
-        intent.putExtra(First_Name, fnameintent);
-        intent.putExtra(Middle_Name, mnameintent);
-        intent.putExtra(Sur_Name, snameintent);
-        intent.putExtra(Email, Emailintent);
-        intent.putExtra(phone, phoneintent);
-        intent.putExtra(city, cityintent);
-        intent.putExtra(parents_Name, parentsnameintent);
-        intent.putExtra(parents_Phone, parentsphoneIntent);
-        intent.putExtra(dob, Dobintent);
-        intent.putExtra(emergency, emergencyintent);
+        intent.putExtra(First_Name, fNameIntent);
+        intent.putExtra(Middle_Name, mNameIntent);
+        intent.putExtra(Sur_Name, sNameIntent);
+        intent.putExtra(Email, emailIntent);
+        intent.putExtra(phone, phoneIntent);
+        intent.putExtra(city, cityIntent);
+        intent.putExtra(parents_Name, parentsNameIntent);
+        intent.putExtra(parents_Phone, parentsPhoneIntent);
+        intent.putExtra(dob, dobIntent);
+        intent.putExtra(emergency, emergencyIntent);
 
 
-        if (profileimage != null && !profileimage.isEmpty()) {
-            intent.putExtra(profile_Picture, profileimage);
+        if (profileImage != null && !profileImage.isEmpty()) {
+            intent.putExtra(profile_Picture, profileImage);
             if (profile != null && !profile.isEmpty()) {
                 DeletePhoto();
             }
@@ -268,6 +219,7 @@ public class DetailActivity extends AppCompatActivity implements
         finish();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
+
 
     @Override
     public void sendInput(byte[] bytes) {
@@ -281,7 +233,7 @@ public class DetailActivity extends AppCompatActivity implements
             StorageReference profileImageRef =
                     FirebaseStorage.getInstance().getReference(user.getUid() + "ProfilePictures/" + currentTimeMillis() + ".jpg");
             if (uriProfileImage != null) {
-                progressBar.setVisibility(View.VISIBLE);
+                activityDetailBinding.progressbarUpdate.setVisibility(View.VISIBLE);
                 profileImageRef.putBytes(uriProfileImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -291,11 +243,18 @@ public class DetailActivity extends AppCompatActivity implements
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                         while
                         (!urlTask.isSuccessful()) ;
-                        Uri downloadUrl = urlTask.getResult();
-                        profileimage = downloadUrl.toString();
-                        progressBar.setVisibility(View.GONE);
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(uriProfileImage, 0, uriProfileImage.length);
-                        imageView.setImageBitmap(bitmap);
+                            Uri downloadUrl = urlTask.getResult();
+                            profileImage = downloadUrl.toString();
+                            save.setVisible(true);
+                            activityDetailBinding.progressbarUpdate.setVisibility(View.GONE);
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(uriProfileImage, 0, uriProfileImage.length);
+                            activityDetailBinding.imageViewDe.setImageBitmap(bitmap);
+
+                    }
+                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        save.setVisible(false);
                     }
                 });
             }
@@ -308,9 +267,9 @@ public class DetailActivity extends AppCompatActivity implements
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
+        String currentDateString = DateFormat.getDateInstance(DateFormat.DEFAULT).format(c.getTime());
 
-        textViewDob.setText(currentDateString);
+        activityDetailBinding.texViewDob.setText(currentDateString);
     }
 
     @Override
@@ -320,7 +279,7 @@ public class DetailActivity extends AppCompatActivity implements
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    void DeletePhoto() {
+    public void DeletePhoto() {
         StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(profile);
         storageReference.delete();
     }

@@ -1,4 +1,4 @@
-package com.example.hostelproject;
+package com.example.hostelproject.FireBaseAccountsUtils;
 
 import android.content.Intent;
 import android.os.Build;
@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.hostelproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

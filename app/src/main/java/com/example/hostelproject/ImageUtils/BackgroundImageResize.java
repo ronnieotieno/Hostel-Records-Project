@@ -1,4 +1,4 @@
-package com.example.hostelproject;
+package com.example.hostelproject.ImageUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,8 +9,8 @@ import android.view.View;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static com.example.hostelproject.ChooseImageFragment.mOnInputListener;
-import static com.example.hostelproject.ChooseImageFragment.progressBar;
+import static com.example.hostelproject.ImageUtils.ChooseImageFragment.mOnInputListener;
+import static com.example.hostelproject.ImageUtils.ChooseImageFragment.progressBar;
 
 public class BackgroundImageResize extends AsyncTask<Uri, Integer, byte[]> {
 
@@ -25,14 +25,13 @@ public class BackgroundImageResize extends AsyncTask<Uri, Integer, byte[]> {
 
     }
 
-   private ChooseImageFragment chooseImageActivity;
-
+    private ChooseImageFragment chooseImageActivity;
 
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        // Toast.makeText(context, "Compressing the Image", Toast.LENGTH_SHORT).show();
+
         progressBar.setVisibility(View.VISIBLE);
 
     }

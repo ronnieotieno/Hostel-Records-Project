@@ -1,24 +1,25 @@
-package com.example.hostelproject;
+package com.example.hostelproject.ui;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.hostelproject.ImageUtils.ChooseImageFragment;
+import com.example.hostelproject.R;
+import com.example.hostelproject.databinding.ActivityEnterDataBinding;
 import com.example.hostelproject.models.Item;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,11 +45,6 @@ import static java.lang.System.currentTimeMillis;
 
 public class EnterDataActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ChooseImageFragment.OnInputListener {
 
-    private EditText editTextFName, editTextMName, editTextSName, editTextEmail, editTextPhone, editTextCity,
-            editTextParentName, editTextParentPhone, editTextEmergency;
-    private TextView textViewAddImage, textViewDob;
-    private Button buttonSave;
-    private ProgressBar progressBar;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static final int CAMERA_PIC_REQUEST = 1;
     public static final int CAMERA_PERMISSION = 2;
@@ -56,6 +52,7 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
     public static final int STORAGE_REQUEST = 4;
     private byte[] mUploadBytes;
     private String profileImageUrl;
+    private ActivityEnterDataBinding enterDataBinding;
     private Context context;
     private CollectionReference dbRef;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -64,7 +61,7 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_enter_data);
+        enterDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_enter_data);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -84,34 +81,20 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
         });
 
 
-        editTextCity = findViewById(R.id.field_city);
-        editTextPhone = findViewById(R.id.field_phone_number);
-        editTextEmail = findViewById(R.id.field_email);
-        editTextSName = findViewById(R.id.field_sur_name);
-        editTextMName = findViewById(R.id.field_middle_name);
-        editTextFName = findViewById(R.id.field_first_name);
-        editTextParentName = findViewById(R.id.field_parentsName);
-        editTextParentPhone = findViewById(R.id.field_parent_phone_number);
-        editTextEmergency = findViewById(R.id.field_Emergency);
-        textViewDob = findViewById(R.id.field_dob);
-        textViewAddImage = findViewById(R.id.field_photo);
-        buttonSave = findViewById(R.id.btn_ok);
-        progressBar = findViewById(R.id.progressbar);
-
-        buttonSave.setOnClickListener(new View.OnClickListener() {
+        enterDataBinding.btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveItem();
             }
         });
-        textViewDob.setOnClickListener(new View.OnClickListener() {
+        enterDataBinding.fieldDob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment datePicker = new com.example.hostelproject.DatePicker();
                 datePicker.show(getSupportFragmentManager(), "date picker");
             }
         });
-        textViewAddImage.setOnClickListener(new View.OnClickListener() {
+        enterDataBinding.fieldPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -137,75 +120,72 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
 
 
     public void saveItem() {
+        String fName = enterDataBinding.fieldFirstName.getText().toString().trim();
+        String mName = enterDataBinding.fieldMiddleName.getText().toString().trim();
+        String sName = enterDataBinding.fieldSurName.getText().toString().trim();
+        String Email = enterDataBinding.fieldEmail.getText().toString().trim();
+        String Phone = enterDataBinding.fieldPhoneNumber.getText().toString().trim();
+        String City = enterDataBinding.fieldCity.getText().toString().trim();
+        String ParentName = enterDataBinding.fieldParentsName.getText().toString().trim();
+        String ParentsPhone = enterDataBinding.fieldParentPhoneNumber.getText().toString().trim();
+        String EmergencyContact = enterDataBinding.fieldEmergency.getText().toString().trim();
+        String Dob = enterDataBinding.fieldDob.getText().toString().trim();
 
-        String Fname = editTextFName.getText().toString().trim();
-        String Mname = editTextMName.getText().toString().trim();
-        String Sname = editTextSName.getText().toString().trim();
-        String Email = editTextEmail.getText().toString().trim();
-        String Phone = editTextPhone.getText().toString().trim();
-        String City = editTextCity.getText().toString().trim();
-        String ParentName = editTextParentName.getText().toString().trim();
-        String ParentsPhone = editTextParentPhone.getText().toString().trim();
-        String EmergencyContact = editTextEmergency.getText().toString().trim();
-        String Dob = textViewDob.getText().toString().trim();
-
-        if (Fname.isEmpty()) {
-            editTextFName.setError("First Name is required");
-            editTextFName.requestFocus();
+        if (fName.isEmpty()) {
+            enterDataBinding.fieldFirstName.setError("First Name is required");
+            enterDataBinding.fieldFirstName.requestFocus();
             return;
         }
-        if (Mname.isEmpty() && Sname.isEmpty()) {
+        if (mName.isEmpty() && sName.isEmpty()) {
             Toast.makeText(EnterDataActivity.this, "Surname or Middle Name is required", Toast.LENGTH_LONG).show();
             return;
         }
         if (City.isEmpty()) {
-            editTextCity.setError("Location is Required");
-            editTextCity.requestFocus();
+            enterDataBinding.fieldCity.setError("Location is Required");
+            enterDataBinding.fieldCity.requestFocus();
             return;
         }
         if (Phone.isEmpty()) {
-            editTextPhone.setError("Phone Number is Required");
-            editTextPhone.requestFocus();
+            enterDataBinding.fieldPhoneNumber.setError("Phone Number is Required");
+            enterDataBinding.fieldPhoneNumber.requestFocus();
             return;
         }
         if (ParentName.isEmpty()) {
-            editTextParentName.setError("Parent's/Guardian's Name is Required");
-            editTextParentName.requestFocus();
+            enterDataBinding.fieldParentsName.setError("Parent's/Guardian's Name is Required");
+            enterDataBinding.fieldParentsName.requestFocus();
             return;
         }
         if (ParentsPhone.isEmpty()) {
-            editTextParentPhone.setError("Parent's/Guardian's Phone number is Required");
-            editTextParentPhone.requestFocus();
+            enterDataBinding.fieldParentPhoneNumber.setError("Parent's/Guardian's Phone number is Required");
+            enterDataBinding.fieldParentPhoneNumber.requestFocus();
             return;
         }
         if (Dob.isEmpty()) {
-            textViewDob.setError("Date of Birth is Required");
-            textViewDob.requestFocus();
+            enterDataBinding.fieldDob.setError("Date of Birth is Required");
+            enterDataBinding.fieldDob.requestFocus();
             return;
-        } else {
-            textViewDob.setError(null);
         }
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
         Date date = Calendar.getInstance().getTime();
-        String dates = format.format(date);
         try {
-            date = formatter.parse(dates);
+            date = formatter.parse(date.toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
+        Log.d("EnterData", "DATE " + date);
+
         if (user != null) {
             dbRef = db.collection(user.getUid() + "Archives");
-            Item items = new Item(Fname, Mname, Sname, Email, Phone, City, ParentName, ParentsPhone, Dob, EmergencyContact, profileImageUrl, date);
-            progressBar.setVisibility(View.VISIBLE);
+            Item items = new Item(fName, mName, sName, Email, Phone, City, ParentName, ParentsPhone, Dob, EmergencyContact, profileImageUrl, date);
+            enterDataBinding.progressbar.setVisibility(View.VISIBLE);
             dbRef.add(items).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
                     Toast.makeText(EnterDataActivity.this, "Saved", LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
+                    enterDataBinding.progressbar.setVisibility(View.GONE);
                     clearViews();
                 }
             });
@@ -221,21 +201,21 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currentDateString = DateFormat.getDateInstance(DateFormat.DEFAULT).format(c.getTime());
 
-        textViewDob.setText(currentDateString);
+        enterDataBinding.fieldDob.setText(currentDateString);
     }
 
     public void clearViews() {
-        editTextEmergency.getText().clear();
-        editTextParentPhone.getText().clear();
-        editTextParentName.getText().clear();
-        editTextFName.getText().clear();
-        editTextCity.getText().clear();
-        editTextMName.getText().clear();
-        editTextSName.getText().clear();
-        editTextEmail.getText().clear();
-        textViewDob.setText(null);
-        textViewAddImage.setText(null);
-        editTextPhone.getText().clear();
+        enterDataBinding.fieldEmergency.getText().clear();
+        enterDataBinding.fieldParentPhoneNumber.getText().clear();
+        enterDataBinding.fieldParentsName.getText().clear();
+        enterDataBinding.fieldFirstName.getText().clear();
+        enterDataBinding.fieldCity.getText().clear();
+        enterDataBinding.fieldMiddleName.getText().clear();
+        enterDataBinding.fieldSurName.getText().clear();
+        enterDataBinding.fieldEmail.getText().clear();
+        enterDataBinding.fieldDob.setText(null);
+        enterDataBinding.fieldPhoto.setText(null);
+        enterDataBinding.fieldPhoneNumber.getText().clear();
     }
 
     @Override
@@ -251,7 +231,7 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
                     FirebaseStorage.getInstance().getReference(user.getUid() + "ProfilePictures/" + currentTimeMillis() + ".jpg");
 
             if (mUploadBytes != null) {
-                progressBar.setVisibility(View.VISIBLE);
+                enterDataBinding.progressbar.setVisibility(View.VISIBLE);
                 profileImageRef.putBytes(mUploadBytes)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -261,14 +241,14 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
 
                                 Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                                 while
-                                (!urlTask.isSuccessful()) ;
-                                Uri downloadUrl = urlTask.getResult();
-                                profileImageUrl = downloadUrl.toString();
-                                textViewAddImage.setVisibility(View.VISIBLE);
-                                textViewAddImage.setEnabled(true);
-                                textViewAddImage.setText("Profile Picture Uploaded");
-                                progressBar.setVisibility(View.GONE);
-                                buttonSave.setEnabled(true);
+                                (!urlTask.isSuccessful());
+                                    Uri downloadUrl = urlTask.getResult();
+                                    profileImageUrl = downloadUrl.toString();
+                                    enterDataBinding.fieldPhoto.setVisibility(View.VISIBLE);
+                                    enterDataBinding.fieldPhoto.setEnabled(true);
+                                    enterDataBinding.fieldPhoto.setText("Profile Picture Uploaded");
+                                    enterDataBinding.progressbar.setVisibility(View.GONE);
+                                    enterDataBinding.btnOk.setEnabled(true);
 
                             }
                         })
@@ -280,10 +260,10 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
                         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        progressBar.getProgress();
-                        buttonSave.setEnabled(false);
-                        textViewAddImage.setText("Uploading Profile Picture...");
-                        textViewAddImage.setEnabled(false);
+                        enterDataBinding.progressbar.getProgress();
+                        enterDataBinding.btnOk.setEnabled(false);
+                        enterDataBinding.fieldPhoto.setText("Uploading Profile Picture...");
+                        enterDataBinding.fieldPhoto.setEnabled(false);
                     }
                 });
             }

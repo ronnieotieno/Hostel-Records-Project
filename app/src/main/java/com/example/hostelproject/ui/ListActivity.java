@@ -1,4 +1,4 @@
-package com.example.hostelproject;
+package com.example.hostelproject.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hostelproject.Adapter.RecyclerViewAdapter;
+import com.example.hostelproject.FireBaseAccountsUtils.LogIn;
+import com.example.hostelproject.R;
 import com.example.hostelproject.models.Item;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -126,7 +128,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         intent.putExtra(dob, clickedItem.getDob());
         intent.putExtra(emergency, clickedItem.getEmergency());
         intent.putExtra(profile_Picture, clickedItem.getProfilePicture());
-
         startActivityForResult(intent, Clicked_Request_Code);
 
 

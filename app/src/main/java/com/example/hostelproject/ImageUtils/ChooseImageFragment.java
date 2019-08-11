@@ -1,4 +1,4 @@
-package com.example.hostelproject;
+package com.example.hostelproject.ImageUtils;
 
 import android.Manifest;
 import android.content.Context;
@@ -21,11 +21,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.hostelproject.R;
+
 import static android.app.Activity.RESULT_OK;
-import static com.example.hostelproject.EnterDataActivity.CAMERA_PERMISSION;
-import static com.example.hostelproject.EnterDataActivity.CAMERA_PIC_REQUEST;
-import static com.example.hostelproject.EnterDataActivity.STORAGE_PERMISSION;
-import static com.example.hostelproject.EnterDataActivity.STORAGE_REQUEST;
+import static com.example.hostelproject.ui.EnterDataActivity.CAMERA_PERMISSION;
+import static com.example.hostelproject.ui.EnterDataActivity.CAMERA_PIC_REQUEST;
+import static com.example.hostelproject.ui.EnterDataActivity.STORAGE_PERMISSION;
+import static com.example.hostelproject.ui.EnterDataActivity.STORAGE_REQUEST;
 
 public class ChooseImageFragment extends DialogFragment {
     private TextView textViewChoose, textViewTake;
