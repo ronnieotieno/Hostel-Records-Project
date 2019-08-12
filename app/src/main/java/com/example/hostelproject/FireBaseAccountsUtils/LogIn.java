@@ -98,14 +98,16 @@ public class LogIn extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, int id) {
 
-                        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(LogIn.this, "Email Sent", Toast.LENGTH_LONG).show();
-                                FirebaseAuth.getInstance().signOut();
-                                dialog.dismiss();
-                            }
-                        });
+                        if (user != null) {
+                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(LogIn.this, "Email Sent", Toast.LENGTH_LONG).show();
+                                    FirebaseAuth.getInstance().signOut();
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
                     }
                 });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

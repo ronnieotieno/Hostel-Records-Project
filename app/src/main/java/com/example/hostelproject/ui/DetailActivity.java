@@ -51,7 +51,7 @@ import static java.lang.System.currentTimeMillis;
 public class DetailActivity extends AppCompatActivity implements
         ChooseImageFragment.OnInputListener, DatePickerDialog.OnDateSetListener {
     private String profile;
-    private byte[] uriProfileImage;
+    private byte[] bytesProfileImage;
     private String profileImage;
     private Toolbar toolbar;
     private MenuItem save;
@@ -223,7 +223,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     @Override
     public void sendInput(byte[] bytes) {
-        uriProfileImage = bytes;
+        bytesProfileImage = bytes;
         UploadImage();
 
     }
@@ -232,9 +232,9 @@ public class DetailActivity extends AppCompatActivity implements
         if (user != null) {
             StorageReference profileImageRef =
                     FirebaseStorage.getInstance().getReference(user.getUid() + "ProfilePictures/" + currentTimeMillis() + ".jpg");
-            if (uriProfileImage != null) {
+            if (bytesProfileImage != null) {
                 activityDetailBinding.progressbarUpdate.setVisibility(View.VISIBLE);
-                profileImageRef.putBytes(uriProfileImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                profileImageRef.putBytes(bytesProfileImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
@@ -247,7 +247,7 @@ public class DetailActivity extends AppCompatActivity implements
                             profileImage = downloadUrl.toString();
                             save.setVisible(true);
                             activityDetailBinding.progressbarUpdate.setVisibility(View.GONE);
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(uriProfileImage, 0, uriProfileImage.length);
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytesProfileImage, 0, bytesProfileImage.length);
                             activityDetailBinding.imageViewDe.setImageBitmap(bitmap);
 
                     }

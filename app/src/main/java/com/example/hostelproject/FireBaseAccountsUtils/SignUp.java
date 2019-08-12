@@ -57,7 +57,7 @@ public class SignUp extends AppCompatActivity {
             return;
         }
         if (!password.equals(pass2)) {
-            signUpBinding.passwordConfirm.setError("Password did not match");
+            signUpBinding.passwordConfirm.setError("Passwords did not match");
             signUpBinding.passwordConfirm.requestFocus();
             return;
         }
@@ -72,9 +72,7 @@ public class SignUp extends AppCompatActivity {
             signUpBinding.passwordSign.setError("Minimum length of password should be 6");
             signUpBinding.passwordSign.requestFocus();
             return;
-
         }
-
         user = mAuth.getCurrentUser();
         signUpBinding.progressSign.setVisibility(View.VISIBLE);
 

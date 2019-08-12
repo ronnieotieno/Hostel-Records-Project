@@ -9,9 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.hostelproject.models.AdapterItem;
 import com.example.hostelproject.R;
 import com.example.hostelproject.databinding.RecyclerViewListBinding;
+import com.example.hostelproject.models.AdapterItem;
 import com.example.hostelproject.models.Item;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -43,12 +43,12 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, Recycler
         } else {
             name = (item.getFname() + " " + item.getMname());
         }
+
         AdapterItem adapterItem = new AdapterItem();
         adapterItem.setName(name);
         adapterItem.setPhone(phone);
         adapterItem.setImage(image);
         viewHolder.recyclerViewListBinding.setAdapter(adapterItem);
-
     }
 
     @NonNull

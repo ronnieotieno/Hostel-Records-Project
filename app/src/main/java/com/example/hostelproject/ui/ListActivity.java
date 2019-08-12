@@ -65,7 +65,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         recyclerView = findViewById(R.id.recyclerView);
-        fab = findViewById(R.id.fab);
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
