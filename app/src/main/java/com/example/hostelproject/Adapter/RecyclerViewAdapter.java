@@ -33,7 +33,6 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, Recycler
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder viewHolder, int i, @NonNull Item item) {
-
         String phone = item.getPhone();
         String name;
         String image = item.getProfilePicture();
@@ -43,7 +42,6 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, Recycler
         } else {
             name = (item.getFname() + " " + item.getMname());
         }
-
         AdapterItem adapterItem = new AdapterItem();
         adapterItem.setName(name);
         adapterItem.setPhone(phone);
@@ -72,7 +70,6 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, Recycler
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION && listener != null) {
                         listener.onItemClick(getSnapshots().getSnapshot(position), position);
-
                     }
                 }
             });
@@ -86,5 +83,4 @@ public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, Recycler
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
-
 }

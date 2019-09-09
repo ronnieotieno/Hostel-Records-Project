@@ -14,5 +14,7 @@ public class Constants {
     public static final String dob = "dob";
     public static final String emergency = "emergency";
     public static final String profile_Picture = "profilePicture";
+    public static final String school = "school";
+    public static String idImage = "idimageUrl";
 
 }

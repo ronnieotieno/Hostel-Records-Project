@@ -43,12 +43,8 @@ public class ImageActivity extends AppCompatActivity {
             }
         });
 
-
         Intent intent = getIntent();
-
         String profile = intent.getStringExtra("Image");
-
-
         Picasso.get()
                 .load(profile)
                 .placeholder(R.drawable.loading)

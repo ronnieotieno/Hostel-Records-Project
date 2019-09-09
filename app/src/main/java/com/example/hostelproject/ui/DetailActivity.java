@@ -19,7 +19,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.hostelproject.Constants;
+import com.example.hostelproject.ImageUtils.IdImageActivity;
 import com.example.hostelproject.ImageUtils.ChooseImageFragment;
+import com.example.hostelproject.ImageUtils.ChooseImageFragmentSecond;
 import com.example.hostelproject.R;
 import com.example.hostelproject.databinding.ActivityDetailBinding;
 import com.example.hostelproject.models.Item;
@@ -42,22 +45,27 @@ import static com.example.hostelproject.Constants.Sur_Name;
 import static com.example.hostelproject.Constants.city;
 import static com.example.hostelproject.Constants.dob;
 import static com.example.hostelproject.Constants.emergency;
+import static com.example.hostelproject.Constants.idImage;
 import static com.example.hostelproject.Constants.parents_Name;
 import static com.example.hostelproject.Constants.parents_Phone;
 import static com.example.hostelproject.Constants.phone;
 import static com.example.hostelproject.Constants.profile_Picture;
+import static com.example.hostelproject.Constants.school;
 import static java.lang.System.currentTimeMillis;
 
 public class DetailActivity extends AppCompatActivity implements
-        ChooseImageFragment.OnInputListener, DatePickerDialog.OnDateSetListener {
+        ChooseImageFragment.OnInputListener, DatePickerDialog.OnDateSetListener, ChooseImageFragmentSecond.OnInputListener {
     private String profile;
     private byte[] bytesProfileImage;
+    private byte[] bytesId;
     private String profileImage;
     private Toolbar toolbar;
     private MenuItem save;
     ActivityDetailBinding activityDetailBinding;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = mAuth.getCurrentUser();
+    private String idImageUrl;
+    private String idImageRevised;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,9 +118,23 @@ public class DetailActivity extends AppCompatActivity implements
         String Emergency = intent.getStringExtra(emergency);
         profile = intent.getStringExtra(profile_Picture);
         String Dob = intent.getStringExtra(dob);
+        String School = intent.getStringExtra(school);
+        idImageUrl = intent.getStringExtra(idImage);
 
-        Item item = new Item(fName, mName, sName, email, Phone, City, parents_name, parents_phone, Dob, Emergency, profile, null);
+        Item item = new Item(fName, mName, sName, email, Phone, City, parents_name, parents_phone, Dob, Emergency, profile, null, School, null);
         activityDetailBinding.setItems(item);
+
+        if (idImageUrl != null) {
+            activityDetailBinding.texViewImage.setText("View ID");
+            activityDetailBinding.texViewImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OpenId();
+                }
+            });
+        } else {
+            activityDetailBinding.texViewImage.setText("No ID");
+        }
 
     }
 
@@ -151,6 +173,9 @@ public class DetailActivity extends AppCompatActivity implements
         activityDetailBinding.texViewParentContact.setEnabled(true);
         activityDetailBinding.texViewEmergencyContact.setEnabled(true);
         activityDetailBinding.texViewCity.setEnabled(true);
+        activityDetailBinding.texViewSchool.setEnabled(true);
+
+        activityDetailBinding.texViewImage.setText("Change ID");
 
         activityDetailBinding.imageViewDe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,6 +193,13 @@ public class DetailActivity extends AppCompatActivity implements
 
             }
 
+        });
+        activityDetailBinding.texViewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialogFragment = new com.example.hostelproject.ImageUtils.ChooseImageFragmentSecond();
+                dialogFragment.show(getSupportFragmentManager(), "mine");
+            }
         });
         activityDetailBinding.texViewDob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,6 +223,7 @@ public class DetailActivity extends AppCompatActivity implements
         String parentsNameIntent = activityDetailBinding.texViewParentName.getText().toString().trim();
         String emergencyIntent = activityDetailBinding.texViewEmergencyContact.getText().toString().trim();
         String dobIntent = activityDetailBinding.texViewDob.getText().toString().trim();
+        String school = activityDetailBinding.texViewSchool.getText().toString().trim();
 
 
         Intent intent = new Intent();
@@ -204,6 +237,7 @@ public class DetailActivity extends AppCompatActivity implements
         intent.putExtra(parents_Phone, parentsPhoneIntent);
         intent.putExtra(dob, dobIntent);
         intent.putExtra(emergency, emergencyIntent);
+        intent.putExtra(Constants.school,school);
 
 
         if (profileImage != null && !profileImage.isEmpty()) {
@@ -215,9 +249,22 @@ public class DetailActivity extends AppCompatActivity implements
         } else {
             intent.putExtra(profile_Picture, profile);
         }
+        if (idImageRevised != null && !idImageRevised.isEmpty()) {
+            intent.putExtra(idImage, idImageRevised);
+            if (idImageUrl != null && !idImageUrl.isEmpty()) {
+                DeletePhotoId();
+            }
+        } else {
+            intent.putExtra(idImage, idImageUrl);
+        }
         setResult(RESULT_OK, intent);
         finish();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    private void DeletePhotoId() {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(idImageUrl);
+        storageReference.delete();
     }
 
 
@@ -243,12 +290,12 @@ public class DetailActivity extends AppCompatActivity implements
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                         while
                         (!urlTask.isSuccessful()) ;
-                            Uri downloadUrl = urlTask.getResult();
-                            profileImage = downloadUrl.toString();
-                            save.setVisible(true);
-                            activityDetailBinding.progressbarUpdate.setVisibility(View.GONE);
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytesProfileImage, 0, bytesProfileImage.length);
-                            activityDetailBinding.imageViewDe.setImageBitmap(bitmap);
+                        Uri downloadUrl = urlTask.getResult();
+                        profileImage = downloadUrl.toString();
+                        save.setVisible(true);
+                        activityDetailBinding.progressbarUpdate.setVisibility(View.GONE);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytesProfileImage, 0, bytesProfileImage.length);
+                        activityDetailBinding.imageViewDe.setImageBitmap(bitmap);
 
                     }
                 }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -284,4 +331,49 @@ public class DetailActivity extends AppCompatActivity implements
         storageReference.delete();
     }
 
+    public void OpenId() {
+        Intent intent = new Intent(DetailActivity.this, IdImageActivity.class);
+        intent.putExtra("idImage", idImageUrl);
+        startActivity(intent);
+    }
+
+    @Override
+    public void sendInputSecond(byte[] bytes) {
+
+        bytesId = bytes;
+        uploadID();
+
+    }
+
+    private void uploadID() {
+
+        if (user != null) {
+            StorageReference profileImageRef =
+                    FirebaseStorage.getInstance().getReference(user.getUid() + "ProfilePictures/" + currentTimeMillis() + ".jpg");
+            if (bytesId != null) {
+                activityDetailBinding.progressbar2.setVisibility(View.VISIBLE);
+                profileImageRef.putBytes(bytesId).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        Toast.makeText(DetailActivity.this, "ID Picture uploaded", Toast.LENGTH_LONG).show();
+
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while
+                        (!urlTask.isSuccessful()) ;
+                        Uri downloadUrl = urlTask.getResult();
+                        idImageRevised = downloadUrl.toString();
+                        save.setVisible(true);
+                        activityDetailBinding.progressbar2.setVisibility(View.GONE);
+
+                    }
+                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        save.setVisible(false);
+                    }
+                });
+            }
+        }
+    }
 }

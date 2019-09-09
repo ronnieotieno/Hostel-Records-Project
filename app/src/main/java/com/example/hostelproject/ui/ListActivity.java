@@ -39,10 +39,12 @@ import static com.example.hostelproject.Constants.Sur_Name;
 import static com.example.hostelproject.Constants.city;
 import static com.example.hostelproject.Constants.dob;
 import static com.example.hostelproject.Constants.emergency;
+import static com.example.hostelproject.Constants.idImage;
 import static com.example.hostelproject.Constants.parents_Name;
 import static com.example.hostelproject.Constants.parents_Phone;
 import static com.example.hostelproject.Constants.phone;
 import static com.example.hostelproject.Constants.profile_Picture;
+import static com.example.hostelproject.Constants.school;
 
 public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener {
 
@@ -65,6 +67,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         recyclerView = findViewById(R.id.recyclerView);
+        fab = findViewById(R.id.fab);
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -127,6 +130,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         intent.putExtra(dob, clickedItem.getDob());
         intent.putExtra(emergency, clickedItem.getEmergency());
         intent.putExtra(profile_Picture, clickedItem.getProfilePicture());
+        intent.putExtra(school,clickedItem.getSchool());
+        intent.putExtra(idImage,clickedItem.getIdImageUrl());
         startActivityForResult(intent, Clicked_Request_Code);
 
 
@@ -148,8 +153,10 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             String Dob = data.getStringExtra(dob);
             String Emergency = data.getStringExtra(emergency);
             String profile = data.getStringExtra(profile_Picture);
+            String School = data.getStringExtra(school);
+            String idImageUrl = data.getStringExtra(idImage);
 
-            Item items = new Item(fname, mname, sname, email, Phone, City, pname, pphone, Dob, Emergency, profile, clickedItem.getDate());
+            Item items = new Item(fname, mname, sname, email, Phone, City, pname, pphone, Dob, Emergency, profile, clickedItem.getDate(),School,idImageUrl);
             if (user != null) {
                 db.collection(user.getUid() + "Archives").document(clickedItem.getId())
                         .set(items).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -203,10 +210,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText != null && !newText.trim().isEmpty()) {
-                    Search(newText.trim());
+                    Search(newText);
                     recyclerViewAdapter.startListening();
-                }
 
                 return false;
             }
@@ -218,7 +223,6 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         if (user != null) {
             dbRef = db.collection(user.getUid() + "Archives");
 
-            if (searchText2 != null && !searchText2.trim().isEmpty() && !TextUtils.isEmpty(searchText2)) {
                 Query query = dbRef.orderBy("fname").startAt(searchText2).endAt(searchText2 + "\uf8ff");
 
                 options = new FirestoreRecyclerOptions.Builder<Item>()
@@ -230,7 +234,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
                 recyclerView.setAdapter(recyclerViewAdapter);
                 recyclerViewAdapter.notifyDataSetChanged();
                 recyclerViewAdapter.setOnItemClickListener(ListActivity.this);
-            }
+
         }
     }
 

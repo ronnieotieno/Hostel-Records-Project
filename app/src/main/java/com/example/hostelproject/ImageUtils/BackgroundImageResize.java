@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import static com.example.hostelproject.ImageUtils.ChooseImageFragment.mOnInputListener;
 import static com.example.hostelproject.ImageUtils.ChooseImageFragment.progressBar;
+import static com.example.hostelproject.ImageUtils.ChooseImageFragmentSecond.progressBar2;
 
 public class BackgroundImageResize extends AsyncTask<Uri, Integer, byte[]> {
 
@@ -25,14 +26,25 @@ public class BackgroundImageResize extends AsyncTask<Uri, Integer, byte[]> {
 
     }
 
+    public BackgroundImageResize(Context ctx, ChooseImageFragmentSecond chooseImageActivitySecond) {
+        this.chooseImageActivitySecond = chooseImageActivitySecond;
+        context = ctx.getApplicationContext();
+
+    }
+
     private ChooseImageFragment chooseImageActivity;
+    private ChooseImageFragmentSecond chooseImageActivitySecond;
 
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
 
-        progressBar.setVisibility(View.VISIBLE);
+        if ( chooseImageActivitySecond != null) {
+            progressBar2.setVisibility(View.VISIBLE);
+        }else if(chooseImageActivity != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -56,9 +68,16 @@ public class BackgroundImageResize extends AsyncTask<Uri, Integer, byte[]> {
     protected void onPostExecute(byte[] bytes) {
         super.onPostExecute(bytes);
         mUploadBytes = bytes;
-        progressBar.setVisibility(View.INVISIBLE);
-        chooseImageActivity.getDialog().dismiss();
-        mOnInputListener.sendInput(mUploadBytes);
+
+        if (chooseImageActivity != null) {
+            progressBar.setVisibility(View.INVISIBLE);
+            chooseImageActivity.getDialog().dismiss();
+            mOnInputListener.sendInput(mUploadBytes);
+        } else if (chooseImageActivitySecond != null) {
+            progressBar2.setVisibility(View.INVISIBLE);
+            chooseImageActivitySecond.getDialog().dismiss();
+            ChooseImageFragmentSecond.mOnInputListener2.sendInputSecond(mUploadBytes);
+        }
     }
 
     public static byte[] getBytesFromBitmap(Bitmap bitmap, int quality) {

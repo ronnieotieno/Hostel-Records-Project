@@ -26,6 +26,8 @@ public class Item {
     private String emergency;
     private String profilePicture;
     private Date date;
+    private String school;
+    private String idImageUrl;
 
     @Exclude
     private String id;
@@ -36,7 +38,7 @@ public class Item {
     }
 
     public Item(String fname, String mname, String sname, String email, String phone,
-                String city, String parentsName, String parentsContact, String dob, String emergency, String profilePicture, Date date) {
+                String city, String parentsName, String parentsContact, String dob, String emergency, String profilePicture, Date date, String school, String idImageUrl) {
         this.fname = fname;
         this.mname = mname;
         this.sname = sname;
@@ -49,6 +51,16 @@ public class Item {
         this.emergency = emergency;
         this.profilePicture = profilePicture;
         this.date = date;
+        this.school = school;
+        this.idImageUrl = idImageUrl;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public String getIdImageUrl() {
+        return idImageUrl;
     }
 
     public void setId(String id) {

@@ -116,6 +116,22 @@
                 android:textColor="#000"
                 android:textColorHint="#808080"
                 android:textSize="15sp" />
+            <EditText
+                android:id="@+id/field_school"
+                style="@style/AppTheme.Widget.FormField"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/form_field_height"
+                android:layout_marginTop="8dp"
+                android:text="@{item.school}"
+                android:background="@drawable/backgrounds"
+                android:hint="School/Institution"
+                android:imeOptions="actionNext|flagNoFullscreen"
+                android:inputType="text"
+                android:minLines="3"
+                android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
+                android:textColor="#000"
+                android:textColorHint="#808080"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/field_phone_number"
@@ -211,6 +227,20 @@
                 android:background="@drawable/backgrounds"
                 android:gravity="center_vertical"
                 android:hint="Add Profile Picture"
+                android:minLines="3"
+                android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
+                android:textColor="#000"
+                android:textColorHint="#808080"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/id"
+                style="@style/AppTheme.Widget.FormField"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/form_field_height"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/backgrounds"
+                android:gravity="center_vertical"
+                android:hint="Add ID Picture"
                 android:minLines="3"
                 android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
                 android:textColor="#000"

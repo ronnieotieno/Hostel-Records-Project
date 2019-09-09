@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.hostelproject.ImageUtils.ChooseImageFragment;
+import com.example.hostelproject.ImageUtils.ChooseImageFragmentSecond;
 import com.example.hostelproject.R;
 import com.example.hostelproject.databinding.ActivityEnterDataBinding;
 import com.example.hostelproject.models.Item;
@@ -43,7 +44,7 @@ import java.util.Date;
 import static android.widget.Toast.LENGTH_SHORT;
 import static java.lang.System.currentTimeMillis;
 
-public class EnterDataActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ChooseImageFragment.OnInputListener {
+public class EnterDataActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ChooseImageFragment.OnInputListener, ChooseImageFragmentSecond.OnInputListener {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static final int CAMERA_PIC_REQUEST = 1;
@@ -51,12 +52,14 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
     public static final int STORAGE_PERMISSION = 3;
     public static final int STORAGE_REQUEST = 4;
     private byte[] mUploadBytes;
+    private byte[] mIdUploadBytes;
     private String profileImageUrl;
     private ActivityEnterDataBinding enterDataBinding;
     private Context context;
     private CollectionReference dbRef;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = mAuth.getCurrentUser();
+    private String IdImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,6 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
         }
 
 
-
         enterDataBinding.btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +105,20 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
 
             }
         });
+
+        enterDataBinding.id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoader2();
+            }
+        });
+    }
+
+    private void showLoader2() {
+
+        DialogFragment dialogFragment = new com.example.hostelproject.ImageUtils.ChooseImageFragmentSecond();
+        dialogFragment.show(getSupportFragmentManager(), "mine");
+
     }
 
 
@@ -131,6 +147,7 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
         String ParentsPhone = enterDataBinding.fieldParentPhoneNumber.getText().toString().trim();
         String EmergencyContact = enterDataBinding.fieldEmergency.getText().toString().trim();
         String Dob = enterDataBinding.fieldDob.getText().toString().trim();
+        String school = enterDataBinding.fieldSchool.getText().toString().trim();
 
         if (fName.isEmpty()) {
             enterDataBinding.fieldFirstName.setError("First Name is required");
@@ -180,7 +197,7 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
 
         if (user != null) {
             dbRef = db.collection(user.getUid() + "Archives");
-            Item items = new Item(fName, mName, sName, Email, Phone, City, ParentName, ParentsPhone, Dob, EmergencyContact, profileImageUrl, date);
+            Item items = new Item(fName, mName, sName, Email, Phone, City, ParentName, ParentsPhone, Dob, EmergencyContact, profileImageUrl, date, school, IdImageUrl);
             enterDataBinding.progressbar.setVisibility(View.VISIBLE);
             dbRef.add(items).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
@@ -217,6 +234,8 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
         enterDataBinding.fieldDob.setText(null);
         enterDataBinding.fieldPhoto.setText(null);
         enterDataBinding.fieldPhoneNumber.getText().clear();
+        enterDataBinding.fieldSchool.getText().clear();
+        enterDataBinding.id.setText(null);
     }
 
     @Override
@@ -242,14 +261,14 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
 
                                 Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                                 while
-                                (!urlTask.isSuccessful());
-                                    Uri downloadUrl = urlTask.getResult();
-                                    profileImageUrl = downloadUrl.toString();
-                                    enterDataBinding.fieldPhoto.setVisibility(View.VISIBLE);
-                                    enterDataBinding.fieldPhoto.setEnabled(true);
-                                    enterDataBinding.fieldPhoto.setText("Profile Picture Uploaded");
-                                    enterDataBinding.progressbar.setVisibility(View.GONE);
-                                    enterDataBinding.btnOk.setEnabled(true);
+                                (!urlTask.isSuccessful()) ;
+                                Uri downloadUrl = urlTask.getResult();
+                                profileImageUrl = downloadUrl.toString();
+                                enterDataBinding.fieldPhoto.setVisibility(View.VISIBLE);
+                                enterDataBinding.fieldPhoto.setEnabled(true);
+                                enterDataBinding.fieldPhoto.setText("Profile Picture Uploaded");
+                                enterDataBinding.progressbar.setVisibility(View.GONE);
+                                enterDataBinding.btnOk.setEnabled(true);
 
                             }
                         })
@@ -279,5 +298,54 @@ public class EnterDataActivity extends AppCompatActivity implements DatePickerDi
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
+    @Override
+    public void sendInputSecond(byte[] bytes) {
+        mIdUploadBytes = bytes;
+        uploadId();
+    }
 
+    private void uploadId() {
+        if (user != null) {
+            StorageReference profileImageRef =
+                    FirebaseStorage.getInstance().getReference(user.getUid() + "IdPictures/" + currentTimeMillis() + ".jpg");
+
+            if (mIdUploadBytes != null) {
+                enterDataBinding.progressbar.setVisibility(View.VISIBLE);
+                profileImageRef.putBytes(mIdUploadBytes)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                Toast.makeText(EnterDataActivity.this, "ID picture uploaded", Toast.LENGTH_SHORT).show();
+
+                                Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                                while
+                                (!urlTask.isSuccessful()) ;
+                                Uri downloadUrl = urlTask.getResult();
+                                IdImageUrl = downloadUrl.toString();
+                                enterDataBinding.id.setEnabled(true);
+                                enterDataBinding.id.setText("ID Uploaded");
+                                enterDataBinding.progressbar.setVisibility(View.GONE);
+                                enterDataBinding.btnOk.setEnabled(true);
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        enterDataBinding.progressbar.getProgress();
+                        enterDataBinding.btnOk.setEnabled(false);
+                        enterDataBinding.id.setText("Uploading ID...");
+                        enterDataBinding.id.setEnabled(false);
+                    }
+                });
+            }
+
+        }
+    }
 }
