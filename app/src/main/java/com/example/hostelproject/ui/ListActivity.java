@@ -3,7 +3,6 @@ package com.example.hostelproject.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,19 +31,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import static com.example.hostelproject.Constants.Email;
-import static com.example.hostelproject.Constants.First_Name;
-import static com.example.hostelproject.Constants.Middle_Name;
-import static com.example.hostelproject.Constants.Sur_Name;
-import static com.example.hostelproject.Constants.city;
-import static com.example.hostelproject.Constants.dob;
-import static com.example.hostelproject.Constants.emergency;
-import static com.example.hostelproject.Constants.idImage;
-import static com.example.hostelproject.Constants.parents_Name;
-import static com.example.hostelproject.Constants.parents_Phone;
-import static com.example.hostelproject.Constants.phone;
-import static com.example.hostelproject.Constants.profile_Picture;
-import static com.example.hostelproject.Constants.school;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListActivity extends AppCompatActivity implements RecyclerViewAdapter.OnItemClickListener {
 
@@ -52,10 +40,10 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     private RecyclerView recyclerView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Context context;
-    private FloatingActionButton fab;
     private Item clickedItem;
     public static int Clicked_Request_Code = 45;
     private FirestoreRecyclerOptions<Item> options;
+    private List<Item> items;
     private CollectionReference dbRef;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = mAuth.getCurrentUser();
@@ -64,10 +52,12 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        items = new ArrayList<>();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         recyclerView = findViewById(R.id.recyclerView);
-        fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -118,20 +108,7 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         clickedItem.setId((documentSnapshot.getId()));
 
         Intent intent = new Intent(ListActivity.this, DetailActivity.class);
-
-        intent.putExtra(First_Name, clickedItem.getFname());
-        intent.putExtra(Middle_Name, clickedItem.getMname());
-        intent.putExtra(Sur_Name, clickedItem.getSname());
-        intent.putExtra(Email, clickedItem.getEmail());
-        intent.putExtra(phone, clickedItem.getPhone());
-        intent.putExtra(city, clickedItem.getCity());
-        intent.putExtra(parents_Name, clickedItem.getParentsName());
-        intent.putExtra(parents_Phone, clickedItem.getParentsContact());
-        intent.putExtra(dob, clickedItem.getDob());
-        intent.putExtra(emergency, clickedItem.getEmergency());
-        intent.putExtra(profile_Picture, clickedItem.getProfilePicture());
-        intent.putExtra(school,clickedItem.getSchool());
-        intent.putExtra(idImage,clickedItem.getIdImageUrl());
+        intent.putExtra("items", clickedItem);
         startActivityForResult(intent, Clicked_Request_Code);
 
 
@@ -142,21 +119,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         super.onActivityResult(requestCode, resultCode, data);
 
         if ((requestCode == Clicked_Request_Code && resultCode == RESULT_OK && data != null)) {
-            String fname = data.getStringExtra(First_Name);
-            String mname = data.getStringExtra(Middle_Name);
-            String sname = data.getStringExtra(Sur_Name);
-            String email = data.getStringExtra(Email);
-            String Phone = data.getStringExtra(phone);
-            String City = data.getStringExtra(city);
-            String pname = data.getStringExtra(parents_Name);
-            String pphone = data.getStringExtra(parents_Phone);
-            String Dob = data.getStringExtra(dob);
-            String Emergency = data.getStringExtra(emergency);
-            String profile = data.getStringExtra(profile_Picture);
-            String School = data.getStringExtra(school);
-            String idImageUrl = data.getStringExtra(idImage);
+            Item items = (Item) data.getSerializableExtra("itemsSend");
 
-            Item items = new Item(fname, mname, sname, email, Phone, City, pname, pphone, Dob, Emergency, profile, clickedItem.getDate(),School,idImageUrl);
             if (user != null) {
                 db.collection(user.getUid() + "Archives").document(clickedItem.getId())
                         .set(items).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -210,8 +174,8 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                    Search(newText);
-                    recyclerViewAdapter.startListening();
+                Search(newText);
+                recyclerViewAdapter.startListening();
 
                 return false;
             }
@@ -219,22 +183,23 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
         return true;
     }
 
-    public void Search(String searchText2) {
+    public void Search(String searchText) {
         if (user != null) {
             dbRef = db.collection(user.getUid() + "Archives");
 
-                Query query = dbRef.orderBy("fname").startAt(searchText2).endAt(searchText2 + "\uf8ff");
+            Query query = dbRef.orderBy("fname").startAt(searchText).endAt(searchText + "\uf8ff");
+            // Query query2 = dbRef.orderBy("date", Query.Direction.DESCENDING);
 
-                options = new FirestoreRecyclerOptions.Builder<Item>()
-                        .setQuery(query, Item.class)
-                        .build();
-                recyclerViewAdapter = new RecyclerViewAdapter(options, ListActivity.this);
-                recyclerView.setHasFixedSize(false);
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                recyclerView.setAdapter(recyclerViewAdapter);
-                recyclerViewAdapter.notifyDataSetChanged();
-                recyclerViewAdapter.setOnItemClickListener(ListActivity.this);
-
+            options = new FirestoreRecyclerOptions.Builder<Item>()
+                    .setQuery(query, Item.class)
+                    //  .setQuery(query2, Item.class)
+                    .build();
+            recyclerViewAdapter = new RecyclerViewAdapter(options, ListActivity.this);
+            recyclerView.setHasFixedSize(false);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setAdapter(recyclerViewAdapter);
+            recyclerViewAdapter.notifyDataSetChanged();
+            recyclerViewAdapter.setOnItemClickListener(ListActivity.this);
         }
     }
 
@@ -255,6 +220,24 @@ public class ListActivity extends AppCompatActivity implements RecyclerViewAdapt
             recyclerView.setAdapter(recyclerViewAdapter);
             recyclerViewAdapter.setOnItemClickListener(ListActivity.this);
         }
+
+//        db.collection(user.getUid() + "Archives").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        items.add(document.toObject(Item.class));
+//                    }
+//
+//                    for (Item i : items) {
+//                        Log.d("MainActivity", i.fname + " " + i.mname);
+//                    }
+//
+//                } else {
+//                    Log.d("MainActivity", "Error getting documents: ", task.getException());
+//                }
+//            }
+//        });
     }
 
 }

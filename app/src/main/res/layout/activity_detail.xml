@@ -3,9 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
         <variable
-            name="items"
-            type="com.example.hostelproject.models.Item" />
+            name="itemsView"
+            type="com.example.hostelproject.models.ItemViewModel" />
+        <variable
+            name="item"
+            type="com.example.hostelproject.ui.DetailActivity" />
     </data>
 
     <RelativeLayout
@@ -36,7 +40,7 @@
                 android:layout_marginTop="10dp"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
-                app:imageUrl="@{items.profilePicture}"
+                app:imageUrl="@{itemsView.item.profilePicture}"
                 android:focusable="true"
                 android:src="@drawable/profile" />
 
@@ -78,7 +82,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/form_field_height"
                     android:layout_marginTop="4dp"
-                    android:text="@{items.fname}"
+                    android:text="@{itemsView.item.fname}"
+                    android:afterTextChanged="@{(editable)->itemsView.item.revisedData(editable,1)}"
                     android:layout_marginBottom="4dp"
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
@@ -104,7 +109,8 @@
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
                     android:focusable="true"
-                    android:text="@{items.mname}"
+                    android:afterTextChanged="@{(editable)->itemsView.item.revisedData(editable,2)}"
+                    android:text="@{itemsView.item.mname}"
                     android:gravity="center"
                     android:minLines="3"
                     android:textAppearance="@style/AppTheme.Widget.TextView.FormFieldMessage"
@@ -125,7 +131,8 @@
                     android:layout_marginBottom="4dp"
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
-                    android:text="@{items.sname}"
+                    android:text="@{itemsView.item.sname}"
+                    android:afterTextChanged="@{(editable)->itemsView.item.revisedData(editable,3)}"
                     android:focusable="true"
                     android:gravity="center"
                     android:minLines="3"
@@ -146,7 +153,8 @@
                     android:layout_marginBottom="4dp"
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
-                    android:text="@{items.school}"
+                    android:text="@{itemsView.item.school}"
+                    android:afterTextChanged="@{(editable)->itemsView.item.revisedData(editable,4)}"
                     android:focusable="true"
                     android:gravity="center"
                     android:minLines="3"
@@ -168,7 +176,7 @@
                     android:layout_marginBottom="4dp"
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
-                    android:text="@{items.dob}"
+                    android:text="@{itemsView.item.dob}"
                     android:focusable="true"
                     android:gravity="center"
                     android:minLines="3"
@@ -191,7 +199,8 @@
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
                     android:focusable="true"
-                    android:text="@{items.email}"
+                    android:text="@{itemsView.item.email}"
+                    android:afterTextChanged="@{(editable)->itemsView.item.revisedData(editable,6)}"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:minLines="3"
@@ -214,7 +223,8 @@
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
                     android:focusable="true"
-                    android:text="@{items.phone}"
+                    android:text="@{itemsView.item.phone}"
+                    android:afterTextChanged="@{(editable)->itemsView.item.revisedData(editable,7)}"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:minLines="3"
@@ -237,7 +247,8 @@
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
                     android:focusable="true"
-                    android:text="@{items.city}"
+                    android:text="@{itemsView.item.city}"
+                    android:afterTextChanged="@{(editable)->itemsView.item.revisedData(editable,8)}"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:minLines="3"
@@ -260,7 +271,8 @@
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
                     android:focusable="true"
-                    android:text="@{items.parentsName}"
+                    android:text="@{itemsView.item.parentsName}"
+                    android:afterTextChanged="@{(editable)->itemsView.item.revisedData(editable,9)}"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:minLines="3"
@@ -283,7 +295,8 @@
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
                     android:focusable="true"
-                    android:text="@{items.parentsContact}"
+                    android:text="@{itemsView.item.parentsContact}"
+                    android:afterTextChanged="@{(editable)->itemsView.item.revisedData(editable,10)}"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:minLines="3"
@@ -304,7 +317,8 @@
                     android:layout_marginTop="4dp"
                     android:background="@drawable/backgrounds"
                     android:enabled="false"
-                    android:text="@{items.emergency}"
+                    android:text="@{itemsView.item.emergency}"
+                    android:afterTextChanged="@{(editable)->itemsView.item.revisedData(editable,11)}"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center"

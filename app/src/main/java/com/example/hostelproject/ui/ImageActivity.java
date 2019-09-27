@@ -45,8 +45,17 @@ public class ImageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String profile = intent.getStringExtra("Image");
+        String id = intent.getStringExtra("idImage");
+
+        String setImage;
+
+        if (profile != null && !profile.isEmpty()) {
+            setImage = profile;
+        } else {
+            setImage = id;
+        }
         Picasso.get()
-                .load(profile)
+                .load(setImage)
                 .placeholder(R.drawable.loading)
                 .fit()
                 .centerInside()

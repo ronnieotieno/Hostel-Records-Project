@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.hostelproject">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -23,10 +20,14 @@
         </activity>
         <activity android:name=".ui.EnterDataActivity" />
         <activity android:name=".ui.DetailActivity" />
-        <activity android:name=".FireBaseAccountsUtils.SignUp"></activity>
         <activity android:name=".FireBaseAccountsUtils.LogIn" />
-        <activity android:name=".ImageUtils.IdImageActivity" />
+        <activity android:name=".FireBaseAccountsUtils.SignUp" />
 
     </application>
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

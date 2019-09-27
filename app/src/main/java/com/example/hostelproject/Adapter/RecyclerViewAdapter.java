@@ -20,15 +20,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 public class RecyclerViewAdapter extends FirestoreRecyclerAdapter<Item, RecyclerViewAdapter.ViewHolder> {
 
     private Context context;
-
-
     private OnItemClickListener listener;
 
 
     public RecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<Item> options, Context context) {
         super(options);
         this.context = context;
-
     }
 
     @Override

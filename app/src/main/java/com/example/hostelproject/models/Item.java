@@ -8,15 +8,16 @@ import com.example.hostelproject.R;
 import com.google.firebase.database.Exclude;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Item {
+public class Item implements Serializable {
 
     public String fname;
-    private String mname;
-    private String sname;
+    public String mname;
+    public String sname;
     private String email;
     private String phone;
     private String city;
@@ -119,6 +120,22 @@ public class Item {
         return date;
     }
 
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setIdImageUrl(String idImageUrl) {
+        this.idImageUrl = idImageUrl;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
     @BindingAdapter({"app:imageUrl"})
     public static void loadImage(View view, String profilePicture) {
 
@@ -130,6 +147,44 @@ public class Item {
                 .fit()
                 .centerInside()
                 .into(imageView);
+    }
+
+    public void revisedData(CharSequence s, int code) {
+
+        switch (code) {
+            case 1:
+                this.fname = s.toString().trim();
+                break;
+            case 2:
+                this.mname = s.toString().trim();
+                break;
+            case 3:
+                this.sname = s.toString().trim();
+                break;
+            case 4:
+                this.school = s.toString().trim();
+                break;
+            case 6:
+                this.email = s.toString().trim();
+                break;
+            case 7:
+                this.phone = s.toString().trim();
+                break;
+            case 8:
+                this.city = s.toString().trim();
+                break;
+            case 9:
+                this.parentsName = s.toString().trim();
+                break;
+            case 10:
+                this.parentsContact = s.toString().trim();
+                break;
+            case 11:
+                this.emergency = s.toString().trim();
+                break;
+        }
+
+
     }
 
 }

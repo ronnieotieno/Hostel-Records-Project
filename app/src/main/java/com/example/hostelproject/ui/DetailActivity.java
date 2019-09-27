@@ -19,13 +19,12 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.hostelproject.Constants;
-import com.example.hostelproject.ImageUtils.IdImageActivity;
 import com.example.hostelproject.ImageUtils.ChooseImageFragment;
 import com.example.hostelproject.ImageUtils.ChooseImageFragmentSecond;
 import com.example.hostelproject.R;
 import com.example.hostelproject.databinding.ActivityDetailBinding;
 import com.example.hostelproject.models.Item;
+import com.example.hostelproject.models.ItemViewModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,34 +37,22 @@ import com.google.firebase.storage.UploadTask;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-import static com.example.hostelproject.Constants.Email;
-import static com.example.hostelproject.Constants.First_Name;
-import static com.example.hostelproject.Constants.Middle_Name;
-import static com.example.hostelproject.Constants.Sur_Name;
-import static com.example.hostelproject.Constants.city;
-import static com.example.hostelproject.Constants.dob;
-import static com.example.hostelproject.Constants.emergency;
-import static com.example.hostelproject.Constants.idImage;
-import static com.example.hostelproject.Constants.parents_Name;
-import static com.example.hostelproject.Constants.parents_Phone;
-import static com.example.hostelproject.Constants.phone;
-import static com.example.hostelproject.Constants.profile_Picture;
-import static com.example.hostelproject.Constants.school;
 import static java.lang.System.currentTimeMillis;
 
 public class DetailActivity extends AppCompatActivity implements
         ChooseImageFragment.OnInputListener, DatePickerDialog.OnDateSetListener, ChooseImageFragmentSecond.OnInputListener {
-    private String profile;
     private byte[] bytesProfileImage;
     private byte[] bytesId;
     private String profileImage;
-    private Toolbar toolbar;
     private MenuItem save;
-    ActivityDetailBinding activityDetailBinding;
+    private ActivityDetailBinding activityDetailBinding;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseUser user = mAuth.getCurrentUser();
-    private String idImageUrl;
     private String idImageRevised;
+    private Item item;
+    private ItemViewModel itemViewModel;
+    private String currentDateString;
+    //public boolean enablesViews = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +60,10 @@ public class DetailActivity extends AppCompatActivity implements
         activityDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
-        toolbar = findViewById(R.id.toolbar);
+
+        itemViewModel = new ItemViewModel();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -93,7 +83,7 @@ public class DetailActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailActivity.this, ImageActivity.class);
-                intent.putExtra("Image", profile);
+                intent.putExtra("Image", item.getProfilePicture());
                 startActivity(intent);
 
 
@@ -107,24 +97,11 @@ public class DetailActivity extends AppCompatActivity implements
 
     public void InitializeIntent() {
         Intent intent = getIntent();
-        String fName = intent.getStringExtra(First_Name);
-        String mName = intent.getStringExtra(Middle_Name);
-        String sName = intent.getStringExtra(Sur_Name);
-        String email = intent.getStringExtra(Email);
-        String Phone = intent.getStringExtra(phone);
-        String City = intent.getStringExtra(city);
-        String parents_phone = intent.getStringExtra(parents_Phone);
-        String parents_name = intent.getStringExtra(parents_Name);
-        String Emergency = intent.getStringExtra(emergency);
-        profile = intent.getStringExtra(profile_Picture);
-        String Dob = intent.getStringExtra(dob);
-        String School = intent.getStringExtra(school);
-        idImageUrl = intent.getStringExtra(idImage);
+        item = (Item) intent.getSerializableExtra("items");
+        itemViewModel.setItem(item);
+        activityDetailBinding.setItemsView(itemViewModel);
 
-        Item item = new Item(fName, mName, sName, email, Phone, City, parents_name, parents_phone, Dob, Emergency, profile, null, School, null);
-        activityDetailBinding.setItems(item);
-
-        if (idImageUrl != null) {
+        if (item.getIdImageUrl() != null) {
             activityDetailBinding.texViewImage.setText("View ID");
             activityDetailBinding.texViewImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -161,7 +138,8 @@ public class DetailActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    void SetViewsEnabled() {
+    public void SetViewsEnabled() {
+
         activityDetailBinding.texViewFirstName.setEnabled(true);
         activityDetailBinding.texViewFirstName.requestFocus();
         activityDetailBinding.texViewMiddleName.setEnabled(true);
@@ -213,57 +191,46 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     public void Update() {
-        String fNameIntent = activityDetailBinding.texViewFirstName.getText().toString().trim();
-        String mNameIntent = activityDetailBinding.texViewMiddleName.getText().toString().trim();
-        String sNameIntent = activityDetailBinding.texViewSurName.getText().toString().trim();
-        String emailIntent = activityDetailBinding.texViewEmail.getText().toString().trim();
-        String phoneIntent = activityDetailBinding.texViewPhone.getText().toString().trim();
-        String cityIntent = activityDetailBinding.texViewCity.getText().toString().trim();
-        String parentsPhoneIntent = activityDetailBinding.texViewParentContact.getText().toString().trim();
-        String parentsNameIntent = activityDetailBinding.texViewParentName.getText().toString().trim();
-        String emergencyIntent = activityDetailBinding.texViewEmergencyContact.getText().toString().trim();
-        String dobIntent = activityDetailBinding.texViewDob.getText().toString().trim();
-        String school = activityDetailBinding.texViewSchool.getText().toString().trim();
 
-
-        Intent intent = new Intent();
-        intent.putExtra(First_Name, fNameIntent);
-        intent.putExtra(Middle_Name, mNameIntent);
-        intent.putExtra(Sur_Name, sNameIntent);
-        intent.putExtra(Email, emailIntent);
-        intent.putExtra(phone, phoneIntent);
-        intent.putExtra(city, cityIntent);
-        intent.putExtra(parents_Name, parentsNameIntent);
-        intent.putExtra(parents_Phone, parentsPhoneIntent);
-        intent.putExtra(dob, dobIntent);
-        intent.putExtra(emergency, emergencyIntent);
-        intent.putExtra(Constants.school,school);
-
-
+        String profileIntent;
         if (profileImage != null && !profileImage.isEmpty()) {
-            intent.putExtra(profile_Picture, profileImage);
-            if (profile != null && !profile.isEmpty()) {
+            profileIntent = profileImage;
+            if (item.getProfilePicture() != null && !item.getProfilePicture().isEmpty()) {
                 DeletePhoto();
             }
 
         } else {
-            intent.putExtra(profile_Picture, profile);
+            profileIntent = item.getProfilePicture();
         }
+        String idImageIntent;
         if (idImageRevised != null && !idImageRevised.isEmpty()) {
-            intent.putExtra(idImage, idImageRevised);
-            if (idImageUrl != null && !idImageUrl.isEmpty()) {
+            idImageIntent = idImageRevised;
+            if (item.getIdImageUrl() != null && !item.getIdImageUrl().isEmpty()) {
                 DeletePhotoId();
             }
         } else {
-            intent.putExtra(idImage, idImageUrl);
+            idImageIntent = item.getIdImageUrl();
         }
+        Item itemSend = itemViewModel.item;
+        itemSend.setDate(item.getDate());
+        itemSend.setProfilePicture(profileIntent);
+        itemSend.setIdImageUrl(idImageIntent);
+
+        if (currentDateString != null && !currentDateString.isEmpty()) {
+            itemSend.setDob(currentDateString);
+        } else {
+            itemSend.setDob(item.getDob());
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra("itemsSend", itemSend);
         setResult(RESULT_OK, intent);
         finish();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void DeletePhotoId() {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(idImageUrl);
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(item.getIdImageUrl());
         storageReference.delete();
     }
 
@@ -314,9 +281,10 @@ public class DetailActivity extends AppCompatActivity implements
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String currentDateString = DateFormat.getDateInstance(DateFormat.DEFAULT).format(c.getTime());
-
+        currentDateString = DateFormat.getDateInstance(DateFormat.DEFAULT).format(c.getTime());
         activityDetailBinding.texViewDob.setText(currentDateString);
+
+
     }
 
     @Override
@@ -327,13 +295,13 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     public void DeletePhoto() {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(profile);
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(item.getProfilePicture());
         storageReference.delete();
     }
 
     public void OpenId() {
-        Intent intent = new Intent(DetailActivity.this, IdImageActivity.class);
-        intent.putExtra("idImage", idImageUrl);
+        Intent intent = new Intent(DetailActivity.this, ImageActivity.class);
+        intent.putExtra("idImage", item.getIdImageUrl());
         startActivity(intent);
     }
 
